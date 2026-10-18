@@ -21,11 +21,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p pigskin-bowl/_vendor
-          for f in gpaudio gpblade gpchar gpfeel gpgrid gpkit gplego gplevels gpmath gpmonetize gpphys gpretro gpshaders gsprites gpstyle gptouch gpviewport gp3d; do
-            cp "gamepress/kit/$f.js" "pigskin-bowl/_vendor/$f.js"
+          for src in gamepress/kit/*.js; do
+            base=$(basename "$src")
+            case "$base" in
+              gp2d.js|gbfixed.js) echo "skip $base" ;;
+              *) cp "$src" "pigskin-bowl/_vendor/$base" ;;
+            esac
           done
-          cp gamepress/kit/three.module.min.js pigskin-bowl/_vendor/three.module.min.js
           echo "vendor file count: $(ls pigskin-bowl/_vendor | wc -l)"
+          ls pigskin-bowl/_vendor
           sed -i "s|'../../kit/|'./_vendor/|g" pigskin-bowl/index.html
           grep -n "_vendor" pigskin-bowl/index.html
       - name: Commit to main
