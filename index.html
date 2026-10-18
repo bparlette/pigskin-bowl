@@ -16,10 +16,10 @@ canvas{display:block}
 // YOU are the fat white running back. 1000 skinny RED defenders swarm at you
 // like a school of fish. Bowl straight through them — they topple and domino
 // into each other. +1/+2/+3 chain points, +7 for the touchdown. Next drive: faster, meaner.
-import { createStage, sfx, clamp, THREE } from '../../kit/gp3d.js';
-import { toon, crowd, hero, particles, sky, groundTex, build, walkClock } from '../../kit/gpkit.js';
-import { parseSpectateParams, spectateCamera } from '../../kit/gpfeel.js';
-import { rnd, R } from '../../kit/gpmath.js';
+import { createStage, sfx, clamp, THREE } from './_vendor/gp3d.js';
+import { toon, crowd, hero, particles, sky, groundTex, build, walkClock } from './_vendor/gpkit.js';
+import { parseSpectateParams, spectateCamera } from './_vendor/gpfeel.js';
+import { rnd, R } from './_vendor/gpmath.js';
 
 // ---- spectate contract (docs/SPECTATE.md): ?spectate=1 ?autostart=1 ?seed=N ----
 const { spectate: SPECTATE } = parseSpectateParams();
