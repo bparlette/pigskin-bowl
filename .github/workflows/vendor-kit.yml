@@ -1,0 +1,40 @@
+name: Vendor gamepress kit
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pigskin-bowl
+        uses: actions/checkout@v4
+        with:
+          path: pigskin-bowl
+      - name: Check out gamepress kit
+        uses: actions/checkout@v4
+        with:
+          repository: bparlette/gamepress
+          ref: main
+          path: gamepress
+      - name: Copy kit files to _vendor and fix index.html imports
+        run: |
+          set -euo pipefail
+          mkdir -p pigskin-bowl/_vendor
+          for f in gpaudio gpblade gpchar gpfeel gpgrid gpkit gplego gplevels gpmath gpmonetize gpphys gpretro gpshaders gsprites gpstyle gptouch gpviewport gp3d; do
+            cp "gamepress/kit/$f.js" "pigskin-bowl/_vendor/$f.js"
+          done
+          cp gamepress/kit/three.module.min.js pigskin-bowl/_vendor/three.module.min.js
+          echo "vendor file count: $(ls pigskin-bowl/_vendor | wc -l)"
+          sed -i "s|'../../kit/|'./_vendor/|g" pigskin-bowl/index.html
+          grep -n "_vendor" pigskin-bowl/index.html
+      - name: Commit to main
+        run: |
+          set -euo pipefail
+          cd pigskin-bowl
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status --short
+          git commit -m "Fix Pages: vendor gamepress kit to _vendor/ and fix import paths"
+          git push origin HEAD:main
